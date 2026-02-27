@@ -1,30 +1,27 @@
-#include <stdio.h>   // For input and output
+#include <stdio.h>
 
-// Define structure for Process
 struct Process
 {
-    int pid;   // Process ID
-    int bt;    // Burst Time
-    int at;    // Arrival Time (accepted as per algorithm)
-    int pr;    // Priority
-    int wt;    // Waiting Time
-    int tat;   // Turnaround Time
-    int st;    // Start Time
-    int ct;    // Completion Time
+    int pid;
+    int bt;
+    int at;
+    int pr;
+    int wt;
+    int tat;
+    int st;
+    int ct;
 };
 
 int main()
 {
-    int n;   // Number of processes
+    int n;
 
-    // Step 2: Accept number of processes
     printf("Enter number of processes: ");
     scanf("%d", &n);
 
-    // Create array of structure
     struct Process p[n];
 
-    // Step 3: Accept process details
+    // Input
     for(int i = 0; i < n; i++)
     {
         printf("\nProcess %d\n", i + 1);
@@ -42,14 +39,13 @@ int main()
         scanf("%d", &p[i].pr);
     }
 
-    // Step 4: Sort processes by ascending priority (Bubble Sort)
+    // Sort by Priority (ascending)
     for(int i = 0; i < n - 1; i++)
     {
         for(int j = 0; j < n - i - 1; j++)
         {
             if(p[j].pr > p[j + 1].pr)
             {
-                // Swap entire structure
                 struct Process temp = p[j];
                 p[j] = p[j + 1];
                 p[j + 1] = temp;
@@ -57,43 +53,31 @@ int main()
         }
     }
 
-    int total_wt = 0;    // Total waiting time
-    int total_tat = 0;   // Total turnaround time
+    int currenttime = 0;
+    int total_wt = 0;
+    int total_tat = 0;
 
-    // Step 5: First process
-    p[0].wt = 0;                   // Waiting time of first process = 0
-    p[0].st = 0;                   // Start time = 0
-    p[0].ct = p[0].bt;             // Completion time = burst time
-    p[0].tat = p[0].bt;            // Turnaround time = burst time
-
-    total_wt += p[0].wt;
-    total_tat += p[0].tat;
-
-    // Step 6: Calculate for remaining processes
-    for(int i = 1; i < n; i++)
+    for(int i = 0; i < n; i++)
     {
-        // Waiting time = previous waiting time + previous burst time
-        p[i].wt = p[i - 1].wt + p[i - 1].bt;
+        // Handle CPU idle case
+        if(currenttime < p[i].at)
+            currenttime = p[i].at;
 
-        // Start time = waiting time
-        p[i].st = p[i].wt;
+        p[i].st = currenttime;
+        p[i].ct = p[i].st + p[i].bt;
+        p[i].tat = p[i].ct - p[i].at;
+        p[i].wt = p[i].tat - p[i].bt;
 
-        // Turnaround time = waiting time + burst time
-        p[i].tat = p[i].wt + p[i].bt;
-
-        // Completion time = turnaround time
-        p[i].ct = p[i].tat;
+        currenttime = p[i].ct;
 
         total_wt += p[i].wt;
         total_tat += p[i].tat;
     }
 
-    // Step 8: Calculate averages
     float avg_wt = (float) total_wt / n;
     float avg_tat = (float) total_tat / n;
 
-    // Display scheduling table
-    printf("\n\nPriority Scheduling Result:\n");
+    printf("\nPriority Scheduling Result:\n");
     printf("PID\tAT\tBT\tPR\tWT\tTAT\tST\tCT\n");
 
     for(int i = 0; i < n; i++)
@@ -109,7 +93,6 @@ int main()
                p[i].ct);
     }
 
-    // Step 7: Print Gantt Chart
     printf("\nGantt Chart:\n");
     for(int i = 0; i < n; i++)
     {
@@ -121,11 +104,8 @@ int main()
 
     printf("\n");
 
-    // Print averages
     printf("\nAverage Waiting Time = %.2f\n", avg_wt);
     printf("Average Turnaround Time = %.2f\n", avg_tat);
 
-    // Step 9: Stop
     return 0;
 }
-
