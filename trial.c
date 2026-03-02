@@ -46,7 +46,9 @@ int main(void){
 
         for(int i = 0;i<n;i++){
             p[i].ct = currenttime + p[i].bt;
-            p[i].tat = 
+            p[i].tat = p[i].ct - p[i].at;
+            p[i].wt = p[i].tat - p[i].bt;
+            twt += p[i].wt;
         }
     }
 
