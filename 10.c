@@ -14,10 +14,10 @@ void *reader(void *arg) { //bcs a thread function should take void * as paramete
     int id = *(int *)arg;
 
     sem_wait(&queue); //if writer , reader is blocked otherwise q = 0 gate closes
-    sem_wait(&mutex); //so the readcount is blocked
+    sem_wait(&mutex); //so the readcount is blocked, bcs multiple readers shouldnt paralelly increment the read count
 
     read_count++;
-    if (read_count == 1)
+    if (read_count == 1) //Since it's the first reader, it calls this to prevent writer
         sem_wait(&rw_mutex); //reader can use the resource
 
     sem_post(&mutex); //free count
@@ -34,7 +34,7 @@ void *reader(void *arg) { //bcs a thread function should take void * as paramete
     sem_wait(&mutex); //bcs multiple readers can exit at same time and cause problems 
 
     read_count--;
-    if (read_count == 0)
+    if (read_count == 0) //now its last reader frees the critical section
         sem_post(&rw_mutex);
 
     sem_post(&mutex);
@@ -81,9 +81,8 @@ int main() {
         pthread_join(w[i], NULL);
     }
 
-    sem_destroy(&mutex);
-    sem_destroy(&rw_mutex);
-    sem_destroy(&queue);
-
     return 0;
 }
+
+
+//TO MAKE IT READER PRIOIRTY JUST DELETE EVERY LIEN THATH MENTIONS QUQUE

@@ -1,54 +1,63 @@
-#include <stdio.h>
+#include<stdio.h>
+#include<pthread.h>
+#include<semaphore.h>
+#include<unistd.h>
 
-struct process{
-    int pid;
-    int at;
-    int bt;
-    int tat;
-    int wt;
-    int ct;
-};
+# define N 5
 
-int main(void){
-    int n;
-    struct process p[n];
-    printf("Enter the number of processes");
-    scanf("%d" ,&n);
+//1, define macro N
+//2 define semaphores
 
-        for(int i = 0; i < n; i++){
-        printf("\nProcess %d\n", i+1);
-        printf("Enter Process ID: ");
-        scanf("%d", &p[i].pid);
-        printf("Enter Arrival Time: ");
-        scanf("%d", &p[i].at);  
-        printf("Enter Burst Time: ");
-        scanf("%d", &p[i].bt);
+sem_t room;
+sem_t chopstick[N];
+sem_t mutex;
+
+
+//3define function
+
+void* philosopher(void * arg){
+
+    //4,extract id
+    int id =  *(int*)arg;
+    
+    while(1){
+        printf("Thinking : %d \n" ,id );
+        sleep(1);
+
+        sem_wait(&room);
+
+        sem_wait(&chopstick[id]);
+        sem_wait(&chopstick[(id +1) % N]);
+
+        sem_wait(&mutex);
+        printf("Im eating : %d \n" , id);
+        sem_post(&mutex);
+
+        sleep(2);
+
+        sem_post(&chopstick[id]);
+        sem_post(&chopstick[(id + 1) % N]);
+        sem_post(room);
     }
 
-    for(int i = 0 ; i< n;i++){
-        for(int j = 0 ; j< n-i-1;j++){
-            if(p[j].at > p[j+1].at){
-                struct process temp = p[j];
-                p[j] = p[j+1];
-                p[j+1] = temp;
-            }
-        }
-    }
-
-    int currenttime = 0;
-    int twt = 0;
-
-    for(int i = 0 ; i< n;i++){
-        if(currenttime < p[i].at){
-            currenttime = p[i].at;
-
-        }
-
-        for(int i = 0;i<n;i++){
-            p[i].ct = currenttime + p[i].bt;
-            p[i].tat = 
-        }
-    }
-
+    return NULL;
 }
 
+int main(void){
+
+    pthread_t tid[N];
+    int phil[N];
+ 
+//Initialize semaphores in main
+
+    sem_init(&mutex,0,1);
+    sem_init(&room,0,N-1);
+
+
+      for (int i = 0; i < N; i++)
+        sem_init(&chopstick[i], 0, 1);
+
+        
+
+
+}
