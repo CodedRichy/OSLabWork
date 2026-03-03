@@ -7,12 +7,6 @@ double mean = 0.0, median = 0.0, stddev = 0.0, least = 0.0;
 int *numbers;
 int count;
 
-int compare(const void *a, const void *b) {
-    int x = *(int*)a;
-    int y = *(int*)b;
-    return (x > y) - (x < y);
-}
-
 void *compute_mean(void *arg) {
     double sum = 0;
     for (int i = 0; i < count; i++)
@@ -23,11 +17,23 @@ void *compute_mean(void *arg) {
 
 void *compute_median(void *arg) {
     int *temp = malloc(count * sizeof(int));
+
+    // Copy original array
     for (int i = 0; i < count; i++)
         temp[i] = numbers[i];
 
-    qsort(temp, count, sizeof(int), compare);
+    // Bubble Sort
+    for (int i = 0; i < count - 1; i++) {
+        for (int j = 0; j < count - i - 1; j++) {
+            if (temp[j] > temp[j + 1]) {
+                int t = temp[j];
+                temp[j] = temp[j + 1];
+                temp[j + 1] = t;
+            }
+        }
+    }
 
+    // Median logic
     if (count % 2 == 0)
         median = (temp[count/2 - 1] + temp[count/2]) / 2.0;
     else
@@ -46,14 +52,15 @@ void *compute_stddev(void *arg) {
     local_mean /= count;
 
     for (int i = 0; i < count; i++)
-        sum += pow(numbers[i] - local_mean, 2);
+        sum += pow(numbers[i] - local_mean, 2); //(xi - meu)^ 2
 
-    stddev = sqrt(sum / count);
+    stddev = sqrt(sum / count); // x-u / n
     pthread_exit(NULL);
 }
 
 void *compute_min(void *arg) {
     int min = numbers[0];
+
     for (int i = 1; i < count; i++)
         if (numbers[i] < min)
             min = numbers[i];
