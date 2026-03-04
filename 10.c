@@ -8,7 +8,7 @@ sem_t mutex;      // protects read_count
 sem_t rw_mutex;   // protects shared resource
 sem_t queue;      // writer priority gate
 
-int read_count = 0;
+int read_count = 0; //global as all readers share the same counter
 
 void *reader(void *arg) { //bcs a thread function should take void * as parameter and return void * -- bcs void * can point to anythign and so the thread can be made any datatype
     int id = *(int *)arg;
