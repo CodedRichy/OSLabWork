@@ -1,0 +1,303 @@
+
+OPERATING SYSTEMS LAB – EXPERIMENT 1 NOTES
+Topic: Familiarisation with Basic Linux Programming Commands
+
+------------------------------------------------
+1. AIM
+------------------------------------------------
+To familiarise with basic Linux programming commands such as:
+ps, strace, gdb, strings, objdump, nm, file, od, xxd, time, fuser, and top.
+
+These commands help in:
+• Process monitoring
+• Debugging programs
+• Binary analysis
+• System performance monitoring
+
+------------------------------------------------
+2. WHAT IS LINUX
+------------------------------------------------
+Linux is a free and open-source Unix-like operating system widely used in servers,
+desktops, embedded systems, and cloud computing.
+
+Important Features:
+• Open Source – source code is publicly available.
+• Multiuser – multiple users can work simultaneously.
+• Multitasking – many programs run at the same time.
+• Security – uses file permissions and ownership.
+• Strong command-line tools.
+
+------------------------------------------------
+3. LINUX FILE SYSTEM
+------------------------------------------------
+Linux follows a hierarchical structure starting from root (/).
+
+Important directories:
+
+/home   → user directories
+/bin    → basic system programs
+/sbin   → system binaries
+/etc    → configuration files
+/dev    → hardware devices
+/proc   → virtual filesystem containing kernel information
+
+------------------------------------------------
+4. IMPORTANT COMMANDS
+------------------------------------------------
+
+1. ps (Process Status)
+
+Purpose:
+Displays information about running processes.
+
+Syntax:
+ps [options]
+
+Example:
+ps -e
+
+Viva line:
+ps displays information about active processes such as PID,
+CPU usage, memory usage, and process state.
+
+------------------------------------------------
+
+2. strace (System Call Trace)
+
+Purpose:
+Traces system calls made by a program.
+
+Syntax:
+strace command
+
+Example:
+strace ./a.out
+
+Viva line:
+strace is used to trace system calls and signals made by a program.
+
+------------------------------------------------
+
+3. gdb (GNU Debugger)
+
+Purpose:
+Used to debug programs.
+
+Syntax:
+gdb executable
+
+Example:
+gdb a.out
+
+Capabilities:
+• Set breakpoints
+• Run program step-by-step
+• Inspect variables
+• Analyze crashes
+
+Viva line:
+gdb is used to debug programs by executing them step-by-step.
+
+------------------------------------------------
+
+4. strings
+
+Purpose:
+Extracts readable text from binary files.
+
+Syntax:
+strings file
+
+Example:
+strings a.out
+
+Uses:
+• Find hidden messages
+• Inspect executable files
+
+Viva line:
+strings extracts printable characters from binary files.
+
+------------------------------------------------
+
+5. objdump (Object Dump)
+
+Purpose:
+Displays information about object files and executables.
+
+Syntax:
+objdump [options] file
+
+Example:
+objdump -d a.out
+
+Uses:
+• View assembly instructions
+• Inspect binary structure
+
+Viva line:
+objdump displays information about object files including assembly code.
+
+------------------------------------------------
+
+6. nm (Name List)
+
+Purpose:
+Displays symbols from object files.
+
+Syntax:
+nm file
+
+Example:
+nm a.out
+
+Displays:
+• Functions
+• Global variables
+
+Viva line:
+nm lists symbols such as functions and variables from object files.
+
+------------------------------------------------
+
+7. file
+
+Purpose:
+Identifies the type of a file.
+
+Syntax:
+file filename
+
+Example:
+file a.out
+
+Example output:
+ELF 64-bit executable
+
+Viva line:
+file determines the type of a file by examining its contents.
+
+------------------------------------------------
+
+8. od (Octal Dump)
+
+Purpose:
+Displays file contents in octal, hex, decimal, or ASCII format.
+
+Syntax:
+od file
+
+Example:
+od file.txt
+
+Viva line:
+od displays file contents in numeric formats such as octal or hexadecimal.
+
+------------------------------------------------
+
+9. xxd (Hex Dump)
+
+Purpose:
+Displays file contents in hexadecimal format.
+
+Syntax:
+xxd file
+
+Example:
+xxd file.txt
+
+Viva line:
+xxd creates a hexadecimal dump of a file.
+
+------------------------------------------------
+
+10. time
+
+Purpose:
+Measures execution time of a command.
+
+Syntax:
+time command
+
+Example:
+time ./a.out
+
+Output shows:
+real → total execution time
+user → CPU time in user mode
+sys  → CPU time in kernel mode
+
+Viva line:
+time measures how long a command takes to execute.
+
+------------------------------------------------
+
+11. fuser
+
+Purpose:
+Identifies processes using a file or port.
+
+Syntax:
+fuser file
+
+Example:
+fuser filename
+
+Use case:
+Detect which process is using a resource.
+
+Viva line:
+fuser shows which process is using a specific file or port.
+
+------------------------------------------------
+
+12. top
+
+Purpose:
+Displays real-time system process information.
+
+Syntax:
+top
+
+Shows:
+• CPU usage
+• Memory usage
+• Running processes
+• System load
+
+Viva line:
+top displays real-time system performance and running processes.
+
+------------------------------------------------
+5. IMPORTANT VIVA QUESTIONS
+------------------------------------------------
+
+Q1: What is Linux?
+Answer:
+Linux is an open-source Unix-like operating system.
+
+Q2: What is a process?
+Answer:
+A process is a program that is currently executing.
+
+Q3: What is PID?
+Answer:
+PID (Process ID) is a unique number assigned to each running process.
+
+Q4: What is debugging?
+Answer:
+Debugging is the process of identifying and fixing errors in programs.
+
+Q5: What is a system call?
+Answer:
+A system call is the interface through which a program requests services
+from the operating system kernel.
+
+------------------------------------------------
+6. RESULT (WRITE IN RECORD)
+------------------------------------------------
+
+Result:
+Familiarised with basic Linux programming commands and understood
+their usage in process monitoring, debugging, binary inspection,
+and system performance analysis.
