@@ -1,0 +1,15 @@
+The Algorithm (Step-by-Step)
+
+This is the game plan for how the program runs:
+
+    Input: Get the numbers from the command line.
+
+    Setup: Allocate memory to store those numbers in an array.
+
+    Delegate: Start 3 threads. Thread A handles Mean, Thread B handles Median, and Thread C handles Standard Deviation.
+
+    Wait: The main program stops and waits for all three threads to finish their work.
+
+    Output: Once everyone is done, print the results stored in the global variables.
+
+    Cleanup: Free the memory you borrowed and exit.

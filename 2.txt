@@ -1,0 +1,206 @@
+
+OPERATING SYSTEMS LAB – EXPERIMENT 2 NOTES
+Topic: Using /proc Virtual Filesystem to Gather System Information
+
+----------------------------------------
+1. WHAT IS /proc
+----------------------------------------
+/proc is a virtual filesystem in Linux that provides real-time information about the system.
+
+Important points:
+• It is created by the Linux kernel.
+• Files inside /proc are NOT stored on disk.
+• Information is generated dynamically when you read them.
+• It contains system information such as:
+  - CPU details
+  - Memory usage
+  - Process information
+  - Kernel parameters
+
+Example:
+/proc/cpuinfo
+/proc/meminfo
+/proc/stat
+
+----------------------------------------
+2. PROCESS DIRECTORIES
+----------------------------------------
+Every running process has a directory inside /proc.
+
+Example:
+/proc/1
+/proc/2450
+/proc/5002
+
+These numbers are called PIDs (Process IDs).
+
+Each directory contains files describing that process:
+/proc/<PID>/status
+/proc/<PID>/stat
+/proc/<PID>/cmdline
+
+----------------------------------------
+3. NUMBER OF CPU CORES
+----------------------------------------
+Command:
+grep -c ^processor /proc/cpuinfo
+
+Explanation:
+• /proc/cpuinfo contains information about each CPU.
+• Each CPU entry begins with:
+  processor : <number>
+• grep -c counts how many times it appears.
+
+Output example:
+8
+
+Meaning:
+The system has 8 logical CPU cores.
+
+----------------------------------------
+4. TOTAL MEMORY AND FREE MEMORY
+----------------------------------------
+Command:
+grep -E "MemTotal|MemFree" /proc/meminfo
+
+Explanation:
+• /proc/meminfo contains memory statistics.
+• MemTotal = total RAM
+• MemFree = currently unused RAM
+
+Example output:
+MemTotal: 16384256 kB
+MemFree: 3245120 kB
+
+----------------------------------------
+5. NUMBER OF RUNNING PROCESSES
+----------------------------------------
+Method 1:
+
+Command:
+ps -e --no-headers | wc -l
+
+Explanation:
+ps -e → lists all running processes
+wc -l → counts them
+
+Example output:
+183
+
+Meaning:
+183 processes are currently running.
+
+Method 2:
+
+Command:
+ls -d /proc/[0-9]* | wc -l
+
+Explanation:
+Each running process has a directory /proc/<PID>.
+Counting these directories gives the total number of processes.
+
+----------------------------------------
+6. RUNNING AND BLOCKED PROCESSES
+----------------------------------------
+Command:
+grep procs_running /proc/stat
+
+Example output:
+procs_running 2
+
+Meaning:
+2 processes are currently executing or ready to execute.
+
+Command:
+grep procs_blocked /proc/stat
+
+Example output:
+procs_blocked 1
+
+Meaning:
+1 process is waiting for I/O or resources.
+
+----------------------------------------
+7. TOTAL PROCESSES CREATED SINCE BOOT
+----------------------------------------
+Command:
+grep processes /proc/stat
+
+Example output:
+processes 15293
+
+Meaning:
+15293 processes have been created since the system booted.
+
+This includes processes that have already terminated.
+
+----------------------------------------
+8. CONTEXT SWITCHES OF A PROCESS
+----------------------------------------
+First find PID of bash process:
+
+Command:
+ps -C bash
+
+Example output:
+PID   TTY
+2310  pts/0
+
+Then check context switches:
+
+Command:
+cat /proc/2310/status | grep ctxt
+
+Example output:
+voluntary_ctxt_switches: 250
+nonvoluntary_ctxt_switches: 35
+
+Explanation:
+voluntary context switch → process gives CPU willingly (waiting for I/O)
+
+nonvoluntary context switch → scheduler forces CPU switch
+
+Total context switches:
+250 + 35 = 285
+
+----------------------------------------
+9. IMPORTANT VIVA QUESTIONS
+----------------------------------------
+
+Q1: What is /proc?
+Answer:
+/proc is a virtual filesystem that provides runtime system information maintained by the Linux kernel.
+
+Q2: Are /proc files stored on disk?
+Answer:
+No. They are generated dynamically by the kernel.
+
+Q3: What does /proc/PID represent?
+Answer:
+It represents information about a running process whose process ID is PID.
+
+Q4: What is PID?
+Answer:
+PID stands for Process ID. It uniquely identifies each running process.
+
+Q5: What is procs_running?
+Answer:
+Number of processes currently running or ready to run.
+
+Q6: What is procs_blocked?
+Answer:
+Number of processes waiting for I/O or resources.
+
+Q7: What is context switching?
+Answer:
+Context switching is the process of saving the state of one process and loading another process so CPU can switch between them.
+
+Q8: Difference between voluntary and nonvoluntary context switches?
+Answer:
+Voluntary → process gives up CPU itself.
+Nonvoluntary → scheduler forces process to give up CPU.
+
+----------------------------------------
+10. RESULT (WRITE IN RECORD)
+----------------------------------------
+System information related to CPU cores, memory usage, process statistics, and context switches was successfully obtained using the /proc virtual filesystem.
