@@ -1,103 +1,64 @@
 #include <stdio.h>
 
-struct Process
-{
-    int pid;
-    int bt;
-    int at;
-    int pr;
-    int wt;
-    int tat;
-    int st;
-    int ct;
+struct Process {
+    int pid, at, bt, pr;
+    int wt, tat, ct, done;
 };
 
-int main()
-{
+int main() {
     int n;
-
     printf("Enter number of processes: ");
-    scanf("%d", &n);
+    scanf("%d",&n);
 
     struct Process p[n];
 
-    // Input
-    for(int i = 0; i < n; i++)
-    {
-        printf("\nProcess %d\n", i + 1);
-
-        printf("Enter Process ID: ");
-        scanf("%d", &p[i].pid);
-
-        printf("Enter Arrival Time: ");
-        scanf("%d", &p[i].at);
-
-        printf("Enter Burst Time: ");
-        scanf("%d", &p[i].bt);
-
-        printf("Enter Priority: ");
-        scanf("%d", &p[i].pr);
+    for(int i=0;i<n;i++){
+        p[i].pid=i+1;
+        p[i].done=0;
+        printf("P%d - Enter AT, BT, Priority: ",i+1);
+        scanf("%d %d %d",&p[i].at,&p[i].bt,&p[i].pr);
     }
 
-    // Sort by Priority (ascending)
-    for(int i = 0; i < n - 1; i++)
-    {
-        for(int j = 0; j < n - i - 1; j++)
-        {
-            if(p[j].pr > p[j + 1].pr)
-            {
-                struct Process temp = p[j];
-                p[j] = p[j + 1];
-                p[j + 1] = temp;
+    int completed=0,time=0;
+    float twt=0,ttat=0;
+
+    while(completed<n){
+
+        int idx=-1;
+        int best=9999;
+
+        for(int i=0;i<n;i++){
+            if(p[i].at<=time && !p[i].done){
+                if(p[i].pr<best){
+                    best=p[i].pr;
+                    idx=i;
+                }
             }
         }
+
+        if(idx==-1){
+            time++;
+            continue;
+        }
+
+        p[idx].wt=time-p[idx].at;
+        time+=p[idx].bt;
+        p[idx].ct=time;
+        p[idx].tat=p[idx].ct-p[idx].at;
+        p[idx].done=1;
+
+        twt+=p[idx].wt;
+        ttat+=p[idx].tat;
+
+        completed++;
     }
 
-    int total_wt = 0;
-    int total_tat = 0;
+    printf("\nPID\tAT\tBT\tPR\tWT\tTAT\n");
 
-    // First process starts at time 0
-    p[0].st = 0;
-    p[0].wt = 0;
-    p[0].ct = p[0].bt;
-    p[0].tat = p[0].ct;   // since arrival time = 0;    
+    for(int i=0;i<n;i++)
+        printf("%d\t%d\t%d\t%d\t%d\t%d\n",
+        p[i].pid,p[i].at,p[i].bt,p[i].pr,p[i].wt,p[i].tat);
 
-    total_wt += p[0].wt;
-    total_tat += p[0].tat;
-
-    // Remaining processes
-    for(int i = 1; i < n; i++)
-    {
-        p[i].st = p[i-1].ct;
-        p[i].wt = p[i].st;
-        p[i].ct = p[i].st + p[i].bt;
-        p[i].tat = p[i].ct;
-
-        total_wt += p[i].wt;
-        total_tat += p[i].tat;
-    }
-
-    float avg_wt = (float) total_wt / n;
-    float avg_tat = (float) total_tat / n;
-
-    printf("\nPriority Scheduling Result:\n");
-    printf("PID\tAT\tBT\tPR\tWT\tTAT\tST\tCT\n");
-
-    for(int i = 0; i < n; i++)
-    {
-        printf("%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n",
-               p[i].pid,
-               p[i].at,
-               p[i].bt,
-               p[i].pr,
-               p[i].wt,
-               p[i].tat,
-               p[i].st,
-               p[i].ct);
-    }
-
-    printf("\nAverage Waiting Time = %.2f\n", avg_wt);
-    printf("Average Turnaround Time = %.2f\n", avg_tat);
-
-    return 0;
+    printf("\nAvg WT: %.2f",twt/n);
+    printf("\nAvg TAT: %.2f\n",ttat/n);
 }
