@@ -33,4 +33,4 @@ gcc exp10/expt10.c -o rw -pthread && ./rw
 
 ## License
 
-All rights reserved.
+Coursework fork of Mekkaden/OS_LAB_WORK. No license is granted here beyond what the original repository allows.
